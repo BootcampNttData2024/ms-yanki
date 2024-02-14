@@ -1,0 +1,163 @@
+openapi: '3.0.2'
+info:
+  title: Microservice Yanki - OpenAPI 3.0
+  version: '1.0'
+  description: |- 
+    La presente especificación contiene los endpoints del microservicio Yanki
+    y esta basado en la especificación OpenAPI 3.0.  
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: alcibarvasquez@gmail.com
+servers:
+  - url: http://localhost:8091
+
+tags:
+  - name: Yanki
+    description: yanki
+
+paths:  
+  /yanki:
+    post:
+      tags:
+        - Yanki
+      operationId: addYanki
+      description: 'POST'
+      requestBody:
+        $ref: '#/components/requestBodies/YankiModel'
+      responses:
+        '200':
+          description: 'response yanki post'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YankiModel'      
+    get:
+      tags:
+        - Yanki
+      operationId: getAllYankis
+      description: GETALL
+      responses:
+        '200':
+          description: 'response get all yankis'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/YankiModel'
+  /yanki/{yankiId}:
+    put:
+      tags:
+        - Yanki
+      operationId: updateYanki
+      description: 'PUT'
+      parameters:
+        - in: path
+          name: yankiId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/YankiModel'
+      responses:
+        '200':
+          description: 'response yanki put'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YankiModel'
+    get:
+      tags:
+        - Yanki
+      operationId: getYankiById
+      description: GET
+      parameters:
+        - in: path
+          name: yankiId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'response get yanki by id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YankiModel'    
+    delete:
+      tags:
+        - Yanki
+      operationId: deleteYankiById
+      description: 'DELETE'
+      parameters:
+        - in: path
+          name: yankiId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: delete yanki by id
+
+  /yanki/filter:  
+    get:
+      tags:
+        - Yanki
+      operationId: getYankiByPhoneNumber
+      description: GET
+      parameters:
+        - in: query
+          name: phoneNumber
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'response get yanki by id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YankiModel'    
+
+components:
+  schemas:    
+    YankiModel:
+      type: object
+      description: Yanki model
+      required:
+        - documentType
+        - documentNumber
+        - phoneNumber
+      properties:
+        yankiId:
+          type: string
+          example: '1'
+        documentType:
+          type: string
+          example: 'DNI, CE'  
+        documentNumber:
+          type: string
+          example: 'BCP'  
+        phoneNumber:
+          type: string
+          example: '924152365'
+        imeiNumber:
+          type: string
+          example: '4521632585471234'
+        email:
+          type: string
+          example: 'alcibar@gmail.com'
+        balance:
+          type: number
+          format: double
+          example: 500.80
+        associatedDebitCard:
+          type: string
+          example: '1'
+  requestBodies:
+    YankiModel:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/YankiModel'
